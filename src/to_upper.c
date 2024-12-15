@@ -6,8 +6,13 @@ char *to_upper(const char *str);
 
 int main(){
     char str[] = "i like it";
-    printf("%s", to_upper(str));
-
+    char *upper_str = to_upper(str);
+    if(upper_str){
+    printf("%s", upper_str);
+    free(upper_str);
+    } else{
+     printf("Memory allocation failed or input is NULL");
+    }
     return 0;
 }
 

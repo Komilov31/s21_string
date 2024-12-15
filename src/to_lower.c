@@ -6,7 +6,13 @@ char *to_lower(const char *str);
 
 int main(){
     char str[] = "i like it";
-    printf("%s", to_lower(str));
+    char *lower_str = to_lower(str);
+    if(lower_str){
+    printf("%s", lower_str);
+    free(lower_str);
+    } else{
+        printf("Memory allocation failed or input is NULL");
+    }
 
     return 0;
 }
