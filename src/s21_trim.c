@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-void *trim(const char *src, const char *trim_chars);
+void *s21_trim(const char *src, const char *trim_chars);
 
 
 int main(){
@@ -45,7 +45,7 @@ int str_ending_check(const char *src, const char *trim_chars, int index){
  return res;
 }
 
-void *trim(const char *src, const char *trim_chars){
+void *s21_trim(const char *src, const char *trim_chars){
     char *trimmed_str = NULL;
     if(src){
         if(trim_chars && trim_chars[0]){
@@ -68,7 +68,7 @@ void *trim(const char *src, const char *trim_chars){
             }
             trimmed_str[i] = '\0';
         } else{
-            trimmed_str = trim(src, "\t\n ");
+            trimmed_str = s21_trim(src, "\t\n ");
         }
         }
         return (void *)trimmed_str;
