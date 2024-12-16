@@ -113,7 +113,7 @@ START_TEST(memcmpTest) {
   char test0src[] = "GOGOGOschool";
   char test0[] = "GOGOGOschool";
   char test1src[] = "school21";
-  char test1[] = "schооl21";
+  char test1[] = "schol21";
   char test2src[] = "\0";
   char test2[] = "\0";
   char test3src[] = "Verter\0 pls";
@@ -126,20 +126,20 @@ START_TEST(memcmpTest) {
   char test6[] = "\0";
   char test7src[] = "1234";
   char test7[] = "123";
-  // можно переделать тесты потому что они вакумные,
-  // для переделки: тесты должны сравнить числа, memcmp в приоритете
-  ck_assert_uint_eq(s21_memcmp(test0src, test0, 12),
-                    memcmp(test0src, test0, 12));
-  ck_assert_uint_eq(s21_memcmp(test1src, test1, 7) == 0,
-                    memcmp(test1src, test1, 7) == 0);
-  ck_assert_uint_eq(s21_memcmp(test2src, test2, 2), memcmp(test2src, test2, 2));
-  ck_assert_uint_eq(s21_memcmp(test3src, test3, 9), memcmp(test3src, test3, 9));
-  ck_assert_uint_eq(s21_memcmp(test4src, test4, 1), memcmp(test4src, test4, 1));
-  ck_assert_uint_eq(s21_memcmp(test5src, test5, 1), memcmp(test5src, test5, 1));
-  ck_assert_uint_eq(s21_memcmp(test6src, test6, 2) == 0,
-                    memcmp(test6src, test6, 2) == 0);
-  ck_assert_uint_eq(s21_memcmp(test7src, test7, 3) == 0,
-                    memcmp(test7src, test7, 3) == 0);
+  char test8src[] = "123";
+  char test8[] = "1234";
+  char test9src[] = "123dsf";
+  char test9[] = "123asu";
+  ck_assert_int_eq(s21_memcmp(test0src, test0, strlen(test0src)), memcmp(test0src, test0, strlen(test0src)));
+  ck_assert_int_eq(s21_memcmp(test1src, test1,s21_strlen(test1src)), memcmp(test1src, test1,s21_strlen(test1src)));
+  ck_assert_int_eq(s21_memcmp(test2src, test2,s21_strlen(test2src)), memcmp(test2src, test2,s21_strlen(test2src)));
+  ck_assert_int_eq(s21_memcmp(test3src, test3,s21_strlen(test3src)), memcmp(test3src, test3,s21_strlen(test3src)));
+  ck_assert_int_eq(s21_memcmp(test4src, test4,s21_strlen(test4src)), memcmp(test4src, test4,s21_strlen(test4src)));
+  ck_assert_int_eq(s21_memcmp(test5src, test5,s21_strlen(test5src)), memcmp(test5src, test5,s21_strlen(test5src)));
+  ck_assert_int_eq(s21_memcmp(test6src, test6,s21_strlen(test6src)), memcmp(test6src, test6,s21_strlen(test6src)));
+  ck_assert_int_eq(s21_memcmp(test7src, test7,s21_strlen(test7src)), memcmp(test7src, test7,s21_strlen(test7src)));
+  ck_assert_int_eq(s21_memcmp(test8src, test8,s21_strlen(test8src)), memcmp(test8src, test8,s21_strlen(test8src)));
+  ck_assert_int_eq(s21_memcmp(test9src, test9,s21_strlen(test9src)), memcmp(test9src, test9,s21_strlen(test9src)));
 }
 END_TEST
 

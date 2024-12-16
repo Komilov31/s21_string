@@ -10,3 +10,12 @@ void *s21_memchr(const void *str, int c, s21_size_t n) {
   }
   return NULL;
 }
+
+// int main(){
+//   char str[] = "Hello Artem!";
+//   char *str1 = (char *)s21_memchr(str, 'H', strlen(str));
+//   char *str2 = (char *)memchr(str, 'H', strlen(str));
+//   printf("%s %s\n", str1, str2);
+
+//   return 0;
+// }
