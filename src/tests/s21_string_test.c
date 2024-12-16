@@ -101,8 +101,59 @@ END_TEST
 START_TEST(s21_trim_test){
 char *result;
 char *test = "\n ! **'\' let's test ** '\' * !'\n' ";
+
 result = s21_trim(test, " !\n*'\'");
+if(result){
+    ck_assert_str_eq(result, "let's test");
+        free(result);
+}
+result = s21_trim(test, "");
+if(result){
+    ck_assert_str_eq(result, "\n ! **'\' let's test ** '\' * !'\n' ");
+        free(result);
+}
+
+char *test2 = "";
+result = s21_trim(test2, NULL);
+if(result){
+    ck_assert_str_eq(result, "");
+        free(result);
+}
+
+char *test3 = "";
+result = s21_trim(NULL, test2);
+if(result){
+    ck_assert_str_eq(result, NULL);
+}
+
+result = s21_trim(test2, "\n\0");
+if(result){
+    ck_assert_str_eq(result, "");
+    free(result);
+}
+
+char *test4 = "test \n";
+result = s21_trim(test4, "\n");
+if(result){
+    ck_assert_str_eq(result, "test ");
+        free(result);
+}
 
 
 }END_TEST
 
+int main(void){
+    Suite *s1 = suite_create("s21_string");
+    TCase *test_case_1 = tcase_create("s21_string");
+    SRunner *sr = srunner_create(s1);
+    suite_add_tcase(s1, test_case_1);
+    tcase_add_test(test_case_1, s21_to_upper_test);
+    tcase_add_test(test_case_1, s21_to_lower_test);
+    tcase_add_test(test_case_1, s21_insert_test);
+    tcase_add_test(test_case_1, s21_trim_test);
+    srunner_run_all(sr, CK_ENV);
+
+    int error = srunner_ntests_failed(sr);
+    srunner_free(sr);
+    return error == 0 ? 0 : 1;
+}
