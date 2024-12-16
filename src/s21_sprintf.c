@@ -20,6 +20,7 @@ int s21_sprintf(char* str, const char* format, ...) {
       // printflags(&params);
       str = input_with_params(str, start, format, &params, &args);
       // printflags(&params);
+			//printf("===|%s|===",str);
     }
     format++;
   }
@@ -104,13 +105,27 @@ void set_length(struct Params* params, const char* format, int* size) {
 
 char* input_with_params(char* str, char* start, const char* format,
                         struct Params* params, va_list* args) {
-  if (*format == 'd' || *format == 'i') {
-    str = input_num(str, params, args, *format);
-  } else if (*format == 'o' || *format == 'x' || *format == 'X' ||
-             *format == 'u') {
-    str = input_num(str, params, args, *format);
+  if (*format == 'd' || *format == 'i'|| *format == 'o' || *format == 'x' || *format == 'X' ||
+             *format == 'u'||*format == 'p') {
+		if(*format == 'p'){
+			params->hash=1;
+			str = input_num(str, params, args, 'x');
+		}else
+    	str = input_num(str, params, args, *format);
   }
-
+	else if (*format == 'c' || *format == 's'|| *format =='%'){
+		str = input_symbols(str, params, args, *format);
+		
+	}
+	else if (*format == 'n'){
+		int *n = va_arg(*args, int*);
+		*n=(int)(str-start);
+	}
+	else {
+		
+		str=s21_NULL;
+	}
+	
   return str;
 }
 
@@ -141,9 +156,9 @@ char* input_num(char* str, struct Params* params, va_list* args, char form) {
   char* buff_d = calloc(size, sizeof(char));
 
   int pos = 0;
-  buff_d = num_to_str(params, number, buff_d, size, &pos, form);
-  for (int i = strlen(buff_d) - 1; i >= 0;
-       i--) {  //!!!!!!!!!!!!!!!!!!!!!!!!!!s21_strlen
+  buff_d = num_to_str(params, number, buff_d, &pos, form);
+  for (int i = size - 1; i >= 0;
+       i--) { 
     *str = buff_d[i];
     str++;
   }
@@ -176,7 +191,7 @@ s21_size_t size_num_with_params(struct Params* params, long int number,
 }
 
 char* num_to_str(struct Params* params, long int number, char* buff_d,
-                 s21_size_t size, int* pos, char form) {
+                  int* pos, char form) {
   //*pos=0;
   int b;
   if (number == 0 && !((params->dot) && (params->accuracy == 0))) {
@@ -186,20 +201,16 @@ char* num_to_str(struct Params* params, long int number, char* buff_d,
   long int new_number = number;
   if (new_number < 0) new_number = -new_number;
   while (new_number != 0) {
-    if (new_number % params->number_system > 9 && form != 'X')
-      b = 87;
-    else if (new_number % params->number_system > 9)
-      b = 55;
-    else
-      b = 48;
-
+    if (new_number % params->number_system > 9 && form != 'X') b = 87;
+    else if (new_number % params->number_system > 9) b = 55;
+    else b = 48;
     buff_d[*pos] = (char)(new_number % params->number_system + b);
     (*pos)++;
     new_number /= params->number_system;
   }
   //"321"
   while ((params->accuracy > *pos) ||
-         (params->width > *pos && !params->minus && params->zero)) {
+         (params->width-1 > *pos && !params->minus && params->zero)) {
     buff_d[*pos] = '0';
     (*pos)++;
   }
@@ -218,14 +229,10 @@ char* num_to_str(struct Params* params, long int number, char* buff_d,
     (*pos)++;
     buff_d[*pos] = '0';
     (*pos)++;
-  } else if (params->hash && form == 'o') {
+  } else if ((params->hash && form == 'o') || (params->width > *pos && !params->minus && params->zero)) {
     buff_d[*pos] = '0';
     (*pos)++;
   }
-  if (((form == 'd' || form == 'i') && params->hash) ||
-      ((form != 'd' || form != 'i') && (params->space || params->plus)))
-    fprintf(stderr, "Params error: \n");
-  //"32100+"
   while (params->width > *pos && !params->minus) {
     buff_d[*pos] = ' ';
     (*pos)++;
@@ -234,11 +241,40 @@ char* num_to_str(struct Params* params, long int number, char* buff_d,
   //"32100+  "
 }
 
-// char *dig_to_char(long int digit){
-// 	if (digit >=0 && digit=<9){
+char* input_symbols(char* str, struct Params* params, va_list* args, char form){
+	char *symbols=s21_NULL;
+	int i;
+	int width = params->width;
+	if (form == 'c' || form == '%'){
+		char ch[2];
+		if (form == '%') ch[0]='%'; 
+		else ch[0] = (char)va_arg(*args, int);
+		ch[1] = '\0';
+		symbols=ch;
+		i=1;
+		}
 
-// 	}
-// }
+	if (form == 's') {
+		symbols = va_arg(*args, char*);
+		i=strlen(symbols);
+		if (params->accuracy > 0 && params->accuracy<i) i=params->accuracy;
+		}
+	while(width-i > 0 && !(params->minus)){
+		*str=' ';
+		width--;
+		str++;
+	}
+	
+	strncpy(str, symbols, i);
+  str += i;
+
+	while(width-i > 0 && params->minus){
+		*str=' ';
+		width--;
+		str++;
+	}
+	return str;
+}
 
 void printflags(struct Params* params) {
   printf("\n|%d\n", params->accuracy);

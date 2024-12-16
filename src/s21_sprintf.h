@@ -33,7 +33,8 @@ char* input_num(char* str, struct Params* params, va_list* args, char form);
 s21_size_t size_num_with_params(struct Params* params, long int number,
                                 char form);
 char* num_to_str(struct Params* params, long int number, char* buff_d,
-                 s21_size_t size, int* pos, char form);
+                 int* pos, char form);
+char* input_symbols(char* str, struct Params* params, va_list* args, char form);
 
 void printflags(struct Params* params);
 #endif
