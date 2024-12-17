@@ -32,9 +32,10 @@ char* input_with_params(char* str, char* start, const char* format,
 char* input_num(char* str, struct Params* params, va_list* args, char form);
 s21_size_t size_num_with_params(struct Params* params, long int number,
                                 char form);
-char* num_to_str(struct Params* params, long int number, char* buff_d,
-                 int* pos, char form);
+char* num_to_str(struct Params* params, long int number, char* buff_d, int* pos,
+                 char form);
 char* input_symbols(char* str, struct Params* params, va_list* args, char form);
+char* p_null(char* str, struct Params* params, int* pos);
 
 void printflags(struct Params* params);
 #endif
