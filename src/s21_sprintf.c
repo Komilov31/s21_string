@@ -149,6 +149,7 @@ char* input_num(char* str, struct Params* params, va_list* args, char form) {
 
   if (!(form == 'p' && number == 0)) {
     s21_size_t size = size_num_with_params(params, number, form);
+		printf("++|%d|++\n",(int)size);
     char* buff_d = calloc(size, sizeof(char));
 
     buff_d = num_to_str(params, number, buff_d, &pos, form);
@@ -185,8 +186,8 @@ s21_size_t size_num_with_params(struct Params* params, long int number,
        (new_number < 0 || params->space || params->plus)) ||
       (form == 'o' && params->hash))
     size++;
-  if ((form == 'x' || form == 'X') && params->hash) size += 2;
-  if (number == 0 && form == 'p') size = 5;
+  if ((form == 'x' || form == 'X'||form =='p') && params->hash) size += 2;
+ 
   if (params->width > size) size = params->width;
 
   return size;
