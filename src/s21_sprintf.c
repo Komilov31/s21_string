@@ -149,7 +149,6 @@ char* input_num(char* str, struct Params* params, va_list* args, char form) {
 
   if (!(form == 'p' && number == 0)) {
     s21_size_t size = size_num_with_params(params, number, form);
-		printf("++|%d|++\n",(int)size);
     char* buff_d = calloc(size, sizeof(char));
 
     buff_d = num_to_str(params, number, buff_d, &pos, form);
@@ -263,9 +262,9 @@ char* input_symbols(char* str, struct Params* params, va_list* args,
                     char form) {
   char* symbols = s21_NULL;
   int i;
+	char ch[2];
   int width = params->width;
   if (form == 'c') {
-    char ch[2];
     ch[0] = (char)va_arg(*args, int);
     ch[1] = '\0';
     symbols = ch;
