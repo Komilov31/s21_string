@@ -315,9 +315,3 @@ char* p_null(char* str, struct Params* params, int* pos) {
   (*pos)++;
   return str;
 }
-
-void printflags(struct Params* params) {
-  printf("\n|%d\n", params->accuracy);
-  printf("%d\n", params->width);
-  printf("%d|\n", params->dot);
-}

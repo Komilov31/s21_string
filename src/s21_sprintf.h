@@ -37,5 +37,4 @@ char* num_to_str(struct Params* params, long int number, char* buff_d, int* pos,
 char* input_symbols(char* str, struct Params* params, va_list* args, char form);
 char* p_null(char* str, struct Params* params, int* pos);
 
-void printflags(struct Params* params);
 #endif
