@@ -2,7 +2,7 @@
 
 
 char *s21_strrchr(const char *str, int c) {
-    char *return_value = NULL;
+    char *return_value = s21_NULL;
     size_t len = strlen(str); // change
     for (int i = len; i >= 0; i--) {
         if (c == str[i]) {
