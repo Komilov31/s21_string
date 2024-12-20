@@ -1,28 +1,28 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "s21_string.h"
+// #include <string.h>
+// #include <stdlib.h>
 
-void *s21_insert(const char *src, const char *str, size_t start_index);
+// void *s21_insert(const char *src, const char *str, s21_size_t start_index);
 
-int main(){
-    char src[] = "testing string";
-    char str[] = "this ";
-    char *with_insertion = insert(src, str, 8);
-    printf("%s", with_insertion);
-    free(with_insertion);
-    return 0;
-}
+// int main(){
+//     char src[] = "testing string";
+//     char str[] = "this ";
+//     char *with_insertion = insert(src, str, 8);
+//     printf("%s", with_insertion);
+//     free(with_insertion);
+//     return 0;
+// }
 
-void *s21_insert(const char *src, const char *str, size_t start_index){
-    char *string_with_insertion = NULL;
+void *s21_insert(const char *src, const char *str, s21_size_t start_index){
+    char *string_with_insertion = s21_NULL;
     if(src && str && start_index <= strlen(src)){
         string_with_insertion = malloc((strlen(src) + strlen(str) + 1) * sizeof(char));
-    size_t i = 0;
+    s21_size_t i = 0;
     for(; i < start_index; i++){
             string_with_insertion[i] = src[i];
         }
-    size_t end_of_src = i;
-    for(size_t j = 0; j < strlen(str); i++, j++){
+    s21_size_t end_of_src = i;
+    for(s21_size_t j = 0; j < strlen(str); i++, j++){
         string_with_insertion[i] = str[j];
     }
     for(; end_of_src < strlen(src); end_of_src++, i++){
