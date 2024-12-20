@@ -362,16 +362,16 @@ START_TEST(strncpyTest) {
   char str10_0[] = "jhsdfakjfhq2kljhsdkjnb123";
   char str0_10[] = "d";
   
-  ck_assert_str_eq(s21_strncpy(str0_1, str1_0), strncpy(str0_1, str1_0));
-  ck_assert_str_eq(s21_strncpy(str0_2, str2_0), strncpy(str0_2, str2_0));
-  ck_assert_str_eq(s21_strncpy(str0_3, str3_0), strncpy(str0_3, str3_0));
-  ck_assert_str_eq(s21_strncpy(str0_4, str4_0), strncpy(str0_4, str4_0));
-  ck_assert_str_eq(s21_strncpy(str0_5, str5_0), strncpy(str0_5, str5_0));
-  ck_assert_str_eq(s21_strncpy(str0_6, str6_0), strncpy(str0_6, str6_0));
-  ck_assert_str_eq(s21_strncpy(str0_7, str7_0), strncpy(str0_7, str7_0));
-  ck_assert_str_eq(s21_strncpy(str0_8, str8_0), strncpy(str0_8, str8_0));
-  ck_assert_str_eq(s21_strncpy(str0_9, str9_0), strncpy(str0_9, str9_0));
-  ck_assert_str_eq(s21_strncpy(str0_10, str10_0), strncpy(str0_10, str10_0));
+  ck_assert_str_eq(s21_strncpy(str0_1, str1_0, strlen(str1_0)), strncpy(str0_1, str1_0));
+  ck_assert_str_eq(s21_strncpy(str0_2, str2_0, strlen(str2_0)), strncpy(str0_2, str2_0));
+  ck_assert_str_eq(s21_strncpy(str0_3, str3_0, strlen(str3_0)), strncpy(str0_3, str3_0));
+  ck_assert_str_eq(s21_strncpy(str0_4, str4_0, strlen(str4_0)), strncpy(str0_4, str4_0));
+  ck_assert_str_eq(s21_strncpy(str0_5, str5_0, strlen(str5_0)), strncpy(str0_5, str5_0));
+  ck_assert_str_eq(s21_strncpy(str0_6, str6_0, strlen(str6_0)), strncpy(str0_6, str6_0));
+  ck_assert_str_eq(s21_strncpy(str0_7, str7_0, strlen(str7_0)), strncpy(str0_7, str7_0));
+  ck_assert_str_eq(s21_strncpy(str0_8, str8_0, strlen(str8_0)), strncpy(str0_8, str8_0));
+  ck_assert_str_eq(s21_strncpy(str0_9, str9_0, strlen(str9_0)), strncpy(str0_9, str9_0));
+  ck_assert_str_eq(s21_strncpy(str0_10, str10_0, strlen(str10_0)), strncpy(str0_10, str10_0));
   
 }
 END_TEST
