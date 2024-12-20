@@ -13,8 +13,19 @@ size_t s21_strcspn(const char *str1, const char *str2) {
     }
 
     if (counter == 0 && flag == 0) {
-        counter = strlen(str1); // change
+        counter = s21_strlen(str1); 
     }
 
     return counter;
+}
+
+
+int does_contain(const char *input, char char_to_find) {
+    int flag = 0;
+    for (int i = 0; input[i] != '\0'; i++){
+        if (input[i] == char_to_find) {
+            flag = 1;
+        }
+    }
+    return flag;
 }
