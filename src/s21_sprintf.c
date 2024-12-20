@@ -2,8 +2,8 @@
 
 #include <string.h>
 
-int s21_sprintf(char* str, const char* format, ...) {
-  char* start = str;
+int s21_sprintf(char *str, const char *format, ...) {
+  char *start = str;
   va_list args;
   va_start(args, format);
 
@@ -22,11 +22,10 @@ int s21_sprintf(char* str, const char* format, ...) {
   }
   *str = '\0';
   va_end(args);
-
   return (str - start);
 }
 
-int read_params(struct Params* params, const char* format, va_list* args) {
+int read_params(struct Params *params, const char *format, va_list *args) {
   int size = 0;
   set_flags(params, format, &size);
   set_width(&(params->width), format + size, &size, args);
@@ -35,7 +34,7 @@ int read_params(struct Params* params, const char* format, va_list* args) {
   return size;
 }
 
-void set_flags(struct Params* params, const char* format, int* size) {
+void set_flags(struct Params *params, const char *format, int *size) {
   int flags = 1;
   while (flags) {
     if (*format == '+') {
@@ -62,7 +61,7 @@ void set_flags(struct Params* params, const char* format, int* size) {
   if (params->zero && params->minus) params->zero = 0;
 }
 
-void set_width(int* width, const char* format, int* size, va_list* args) {
+void set_width(int *width, const char *format, int *size, va_list *args) {
   // здесь возможна ошибка потому что sprintf(str, "hello %*12d", 5, 123);
   // выведет %512d и ошибку хз короче
   if (*format == '*') {
@@ -78,8 +77,8 @@ void set_width(int* width, const char* format, int* size, va_list* args) {
   }
 }
 
-void set_accuracy(struct Params* params, const char* format, int* size,
-                  va_list* args) {
+void set_accuracy(struct Params *params, const char *format, int *size,
+                  va_list *args) {
   if (*format == '.') {
     params->dot = 1;
     params->zero = 0;  ///////////
@@ -89,7 +88,7 @@ void set_accuracy(struct Params* params, const char* format, int* size,
   }
 }
 
-void set_length(struct Params* params, const char* format, int* size) {
+void set_length(struct Params *params, const char *format, int *size) {
   if (*format == 'L')
     params->length = 'L';
   else if (*format == 'l')
@@ -99,22 +98,25 @@ void set_length(struct Params* params, const char* format, int* size) {
   if (params->length) (*size)++;
 }
 
-char* input_with_params(char* str, char* start, const char* format,
-                        struct Params* params, va_list* args) {
+char *input_with_params(char *str, char *start, const char *format,
+                        struct Params *params, va_list *args) {
   if (*format == 'd' || *format == 'i' || *format == 'o' || *format == 'x' ||
       *format == 'X' || *format == 'u' || *format == 'p') {
     if (*format == 'p') {
       params->hash = 1;
     }
     str = input_num(str, params, args, *format);
+  } else if (*format == 'e' || *format == 'E' || *format == 'g' ||
+             *format == 'G' || *format == 'f') {
+    if (params->dot) params->zero = 1;
+    str = input_double(str, params, args, *format);
   } else if (*format == 'c' || *format == 's') {
     str = input_symbols(str, params, args, *format);
-
   } else if (*format == '%') {
     *str = '%';
     str++;
   } else if (*format == 'n') {
-    int* n = va_arg(*args, int*);
+    int *n = va_arg(*args, int *);
     *n = (int)(str - start);
   } else {
     str = s21_NULL;
@@ -122,9 +124,107 @@ char* input_with_params(char* str, char* start, const char* format,
 
   return str;
 }
+int num_power(long double *number, int e) {
+  if (fabsl(*number) > 1) {
+    while (fabsl(*number) >= 1) {
+      *number /= 10;
+      e++;
+    }
+    *number *= 10;
+    e--;
+  } else {
+    while (fabsl(*number) < 1 && *number != 0) {
+      *number *= 10;
+      e--;
+    }
+    if (*number == 0) e = 2;
+  }
+  return e;
+}
 
-char* input_num(char* str, struct Params* params, va_list* args, char form) {
-  long int number;
+int shorter(struct Params *params, long double *number, int e) {
+  long double new_number = 0;
+  new_number = *number;
+  e = num_power(&new_number, e);
+  if (((e >= 0 && e < 6) && params->accuracy > 2) ||
+      ((e < 0 && e > -5) && params->accuracy >= 2))  // от -4 до 5
+    e = -1000;
+  else
+    *number = new_number;
+  return e;
+}
+
+s21_size_t size_double_with_params(struct Params *params, long double *number,
+                                   char form) {
+  int size = 0;
+  int e = 0;
+  int int_part = 0;
+  long double cp_number = *number;
+  if (fabsl(cp_number) > 0 && fabsl(cp_number) < 1) size++;
+  while (fabsl(cp_number) >= 1) {
+    size++;
+    cp_number /= 10;
+  }
+  int_part = size;
+  cp_number *= 10;
+  if (form == 'e' || form == 'E') {
+    e = num_power(number, e);
+    if (abs(e) < 100)
+      size += 2;
+    else
+      size += 3;
+    size += 2;
+  } else if (form == 'g' || form == 'G') {
+    e = shorter(params, number, e);
+    if (e != 0) {
+      if (abs(e) < 100)
+        size += 2;
+      else
+        size += 3;
+      size += 2;
+    }
+  }
+  size++;
+  params->e = e;
+
+  if ((*number < 0 || params->space || params->plus)) size++;
+  if (params->width > size) size = params->width;
+  if (params->accuracy + 1 + int_part > size)
+    size = params->accuracy + 1 + int_part;
+  size++;
+  return size;
+}
+
+char *input_double(char *str, struct Params *params, va_list *args, char form) {
+  long double number = 0;
+  if (params->dot == 0) params->accuracy = 6;
+  if (params->length == 'L') {
+    number = (long double)va_arg(*args, long double);
+  } else
+    number = (double)va_arg(*args, double);
+
+  s21_size_t size = size_double_with_params(params, &number, form);
+  char *buff_d = calloc(size, sizeof(char));
+  if (buff_d != NULL) {
+    int pos = 0;
+    buff_d = double_to_str(params, number, buff_d, &pos, form);
+    for (int i = pos - 1; i >= 0; i--) {
+      *str = buff_d[i];
+      str++;
+    }
+    free(buff_d);
+    while (params->width > pos && params->minus) {
+      *str = ' ';
+      str++;
+      pos++;
+    }
+  } else
+    *str = '0';
+  return str;
+}
+
+char *input_num(char *str, struct Params *params, va_list *args, char form) {
+  long int number = 0;
   int pos = 0;
   if (params->length == 'h') {
     if (form == 'd' || form == 'i')
@@ -149,7 +249,7 @@ char* input_num(char* str, struct Params* params, va_list* args, char form) {
 
   if (!(form == 'p' && number == 0)) {
     s21_size_t size = size_num_with_params(params, number, form);
-    char* buff_d = calloc(size, sizeof(char));
+    char *buff_d = calloc(size, sizeof(char));
 
     buff_d = num_to_str(params, number, buff_d, &pos, form);
     for (int i = pos - 1; i >= 0; i--) {
@@ -170,7 +270,7 @@ char* input_num(char* str, struct Params* params, va_list* args, char form) {
   return str;
 }
 
-s21_size_t size_num_with_params(struct Params* params, long int number,
+s21_size_t size_num_with_params(struct Params *params, long int number,
                                 char form) {
   int size = 0;
   int new_number = number;
@@ -185,16 +285,165 @@ s21_size_t size_num_with_params(struct Params* params, long int number,
        (new_number < 0 || params->space || params->plus)) ||
       (form == 'o' && params->hash))
     size++;
-  if ((form == 'x' || form == 'X'||form =='p') && params->hash) size += 2;
- 
+  if ((form == 'x' || form == 'X' || form == 'p') && params->hash) size += 2;
+
   if (params->width > size) size = params->width;
 
   return size;
 }
 
-char* num_to_str(struct Params* params, long int number, char* buff_d, int* pos,
+int nan_inf(long double number) {
+  int result = 0;
+  if (isnan(number)) result = 1;
+  if (isinf(number)) result = -1;
+  return result;
+}
+
+void output_e(struct Params *params, char *buff_d, int *pos, char form) {
+  int e = params->e;
+  int positive_e = abs(e);
+  if (positive_e < 10) {
+    buff_d[(*pos)++] = '0' + positive_e;
+    buff_d[(*pos)++] = '0';
+
+  } else if (positive_e < 100) {
+    buff_d[(*pos)++] = '0' + positive_e % 10;
+    buff_d[(*pos)++] = '0' + positive_e / 10 % 10;
+  } else {
+    buff_d[(*pos)++] = '0' + positive_e % 10;
+    buff_d[(*pos)++] = '0' + positive_e / 10 % 10;
+    buff_d[(*pos)++] = '0' + positive_e / 100 % 10;
+  }
+  buff_d[(*pos)++] = (e >= 0) ? '+' : '-';
+  if (form == 'g')
+    buff_d[(*pos)++] = 'e';
+  else if (form == 'G')
+    buff_d[(*pos)++] = 'E';
+  else
+    buff_d[(*pos)++] = form;
+}
+
+char *double_to_str(struct Params *params, long double number, char *buff_d,
+                    int *pos, char form) {
+  if (!nan_inf(number)) {
+    if ((form == 'e' || form == 'E') ||
+        ((form == 'g' || form == 'G') && params->e != -1000))
+      output_e(params, buff_d, pos, form);
+    long double integer = 0;
+    long double decimal = modfl(number, &integer);
+    int accuracy = params->accuracy;
+    if (decimal + 10e-15 >= 1) {
+      decimal = 0;
+      integer += 1;
+    }
+    long double decimal_cp = decimal, res = 1;
+    for (int i = 0; (i < 15) && res; i++) {
+      decimal_cp *= 10;
+      if ((long)decimal_cp != 0) res = 0;
+    }
+
+    if ((long)decimal_cp == 0.0 && (form == 'g' || form == 'G')) accuracy = 0;
+
+    if (!accuracy && decimal * 10 > 4) integer += 1;
+    int num_null = 0;
+
+    while (accuracy > 0) {
+      decimal *= 10;
+      accuracy--;
+      if (fabsl(decimal) < 1.0) {
+        num_null++;
+      }
+    }
+
+    if (fmodl(fabsl(decimal) * 10, 10.0) > 4) decimal = roundl(decimal);
+    if ((form == 'g' || form == 'G')) output_d(params, &decimal);
+
+    output_decimal(params, buff_d, pos, num_null, decimal, number, form);
+
+  } else if (nan_inf(number) == -1) {
+    buff_d[(*pos)++] = 'i';
+    buff_d[(*pos)++] = 'n';
+    buff_d[(*pos)++] = 'f';
+  } else {
+    buff_d[(*pos)++] = 'n';
+    buff_d[(*pos)++] = 'a';
+    buff_d[(*pos)++] = 'n';
+  }
+  return buff_d;
+}
+void output_decimal(struct Params *params, char *buff_d, int *pos, int num_null,
+                    long double decimal, long double number, char form) {
+  int flag = 0, new_pos = 0;
+  long int new_decimal = labs((long int)decimal);
+  while (labs(new_decimal) > 0) {
+    new_decimal /= 10;
+    flag = 1;
+    new_pos++;
+  }
+  if (flag == 0) new_pos++;
+
+  flag = 0;
+  new_decimal = labs((long int)decimal);
+  if (params->accuracy > 0 || !params->dot) {
+    while (labs(new_decimal) > 0) {
+      buff_d[(*pos)++] = '0' + new_decimal % 10;
+      new_decimal /= 10;
+      flag = 1;
+      new_pos++;
+    }
+    while (num_null > 0) {
+      num_null--;
+      params->accuracy--;
+      buff_d[(*pos)++] = '0';
+    }
+    buff_d[(*pos)++] = '.';
+  }
+  while (params->accuracy > new_pos && !((form == 'g' || form == 'G'))) {
+    buff_d[(*pos)++] = '0';
+    new_pos++;
+  }
+
+  long int new_number = labs((long int)number);
+
+  flag = 0;
+  while (labs(new_number) > 0) {
+    buff_d[(*pos)++] = '0' + new_number % 10;
+    new_number /= 10;
+    flag = 1;
+  }
+  if (flag == 0) buff_d[(*pos)++] = '0';
+  while ((params->width - 1 > *pos && !params->minus && params->zero &&
+          !params->space)) {
+    buff_d[*pos] = '0';
+    (*pos)++;
+  }
+  symvols_decimal(params, number, buff_d, pos);
+}
+void output_d(struct Params *params, long double *decimal) {
+  int g_accuracy = params->accuracy;
+  long double d_dec = *decimal;
+  // Удаляем незначащие нули
+  while ((long)d_dec % 10 == 0 && g_accuracy > 0 && (long)d_dec != 0) {
+    d_dec /= 10;
+    g_accuracy++;
+  }
+  while ((long)d_dec % 10 == 0 && fabsl(d_dec) > 10e-15) {
+    d_dec *= 10;
+    g_accuracy++;
+  }
+  while ((long)d_dec % 10 > 4) {
+    d_dec /= 10;
+    g_accuracy--;
+  }
+
+  d_dec = roundl(d_dec);
+
+  *decimal = d_dec;
+  params->accuracy = g_accuracy;
+}
+char *num_to_str(struct Params *params, long int number, char *buff_d, int *pos,
                  char form) {
-  int b;
+  int b = 0;
   if (number == 0 && !((params->dot) && (params->accuracy == 0))) {
     buff_d[*pos] = '0';
     (*pos)++;
@@ -232,6 +481,7 @@ char* num_to_str(struct Params* params, long int number, char* buff_d, int* pos,
   }
 
   //"32100"
+
   if ((form == 'd' || form == 'i') && number < 0) {
     buff_d[*pos] = '-';
     (*pos)++;
@@ -258,11 +508,33 @@ char* num_to_str(struct Params* params, long int number, char* buff_d, int* pos,
   //"32100+  "
 }
 
-char* input_symbols(char* str, struct Params* params, va_list* args,
+void symvols_decimal(struct Params *params, long int number, char *buff_d,
+                     int *pos) {
+  if (number < 0) {
+    buff_d[*pos] = '-';
+    (*pos)++;
+  } else if (params->plus) {
+    buff_d[*pos] = '+';
+    (*pos)++;
+  } else if (params->space) {
+    buff_d[*pos] = ' ';
+    (*pos)++;
+  } else if (params->width > *pos && !params->minus && params->zero) {
+    buff_d[*pos] = '0';
+    (*pos)++;
+  }
+
+  while (params->width > *pos && !params->minus) {
+    buff_d[*pos] = ' ';
+    (*pos)++;
+  }
+}
+
+char *input_symbols(char *str, struct Params *params, va_list *args,
                     char form) {
-  char* symbols = s21_NULL;
-  int i;
-	char ch[2];
+  char *symbols = s21_NULL;
+  int i = 0;
+  char ch[2];
   int width = params->width;
   if (form == 'c') {
     ch[0] = (char)va_arg(*args, int);
@@ -272,7 +544,7 @@ char* input_symbols(char* str, struct Params* params, va_list* args,
   }
 
   if (form == 's') {
-    symbols = va_arg(*args, char*);
+    symbols = va_arg(*args, char *);
     i = strlen(symbols);
     if (params->accuracy > 0 && params->accuracy < i) i = params->accuracy;
   }
@@ -292,7 +564,7 @@ char* input_symbols(char* str, struct Params* params, va_list* args,
   }
   return str;
 }
-char* p_null(char* str, struct Params* params, int* pos) {
+char *p_null(char *str, struct Params *params, int *pos) {
   while (params->width - 5 > *pos && !params->minus) {
     *str = ' ';
     str++;

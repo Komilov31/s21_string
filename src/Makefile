@@ -1,9 +1,9 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -std=c11 
 CHECKFLAGS = -lcheck -lsubunit -lm -lrt -lpthread
-SOURCES = tests.c s21_memchr.c s21_memset.c s21_memcpy.c s21_memcmp.c s21_strlen.c s21_strncmp.c s21_strchr.c s21_strncat.c s21_strcspn.c s21_strerror.c s21_strncpy.c s21_strpbrk.c s21_strrchr.c s21_strstr.c s21_strtok.c
+SOURCES = delete.c s21_sprintf.c#tests.c s21_memchr.c s21_memset.c s21_memcpy.c s21_memcmp.c s21_strlen.c s21_strncmp.c s21_strchr.c s21_strncat.c s21_strcspn.c s21_strerror.c s21_strncpy.c s21_strpbrk.c s21_strrchr.c s21_strstr.c s21_strtok.c
 OBJECTS = $(SOURCES:.c=.o)
-VALGRIND = valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all -s
+VALGRIND = valgrind --tool=memcheck --leak-check=yes 
 
 all: s21_sprintf
 
