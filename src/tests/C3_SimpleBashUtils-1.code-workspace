@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "../../../C3_SimpleBashUtils-1"
+		},
+		{
+			"path": "../../../Strings"
+		},
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"stdio.h": "c"
+		}
+	}
+}
