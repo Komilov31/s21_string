@@ -483,6 +483,8 @@ START_TEST(strtokTest) {
   char str5_0[] = " ";
   char str1_5[] = "VERTER LET PASS PLS";
   char str5_1[] = " ";
+  char str0_6[] = "";
+  char str6_0[] = " ";
 
   char *result = s21_strtok(s21_NULL, str5_0);
   char *result1 = s21_strtok(s21_NULL, str5_0);
@@ -496,6 +498,8 @@ START_TEST(strtokTest) {
   ck_assert_str_eq(s21_strtok(str0_3, str3_0), strtok(str0_4, str4_0));
   ck_assert_str_eq(s21_strtok(str0_5, str5_0), strtok(str1_5, str5_1));
   ck_assert_str_eq(s21_strtok(s21_NULL, str5_0), strtok(s21_NULL, str5_1));
+  ck_assert_ptr_eq(s21_strtok(str0_6, str6_0), strtok(str0_6, str6_0));
+
 
 }
 END_TEST
