@@ -13,21 +13,21 @@ char *s21_strtok(char *str, const char *delim) {
         start = s21_NULL;
     } 
 
-    while (*last != '\0' && s21_strchr(delim, *last) != s21_NULL) {
+    while (last != s21_NULL && *last != '\0' && s21_strchr(delim, *last) != s21_NULL) {
         last++;
     }
 
-    if (*last == '\0') {
+    if (last != s21_NULL && *last == '\0') {
         last = s21_NULL;
         start = s21_NULL;
     }
     start = last;
 
-    while (*last != '\0' && s21_strchr(delim, *last) == s21_NULL) {
+    while (last != s21_NULL && *last != '\0' && s21_strchr(delim, *last) == s21_NULL) {
         last++;
     }
 
-    if (*last != '\0') {
+    if (last != s21_NULL && *last != '\0') {
         *last = '\0';
         last++;
     }

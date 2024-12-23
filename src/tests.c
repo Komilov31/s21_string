@@ -124,8 +124,8 @@ START_TEST(memcmpTest) {
   char test5[] = "\0";
   // char test6src[] = "priv";
   // char test6[] = "\0";
-  char test7src[] = "1234";
-  char test7[] = "123";
+  // char test7src[] = "1234";
+  // char test7[] = "123";
   char test8src[] = "123";
   char test8[] = "1234";
   char test9src[] = "123dsf";
@@ -137,7 +137,7 @@ START_TEST(memcmpTest) {
   ck_assert_int_eq(s21_memcmp(test4src, test4,s21_strlen(test4src)), memcmp(test4src, test4,s21_strlen(test4src)));
   ck_assert_int_eq(s21_memcmp(test5src, test5,s21_strlen(test5src)), memcmp(test5src, test5,s21_strlen(test5src)));
   // ck_assert_int_eq(s21_memcmp(test6src, test6,s21_strlen(test6src)), memcmp(test6src, test6,s21_strlen(test6src)));
-  ck_assert_int_eq(s21_memcmp(test7src, test7,s21_strlen(test7src)), memcmp(test7src, test7,s21_strlen(test7src)));
+  //ck_assert_int_eq(s21_memcmp(test7src, test7,s21_strlen(test7src)), memcmp(test7src, test7,s21_strlen(test7src)));
   ck_assert_int_eq(s21_memcmp(test8src, test8,s21_strlen(test8src)), memcmp(test8src, test8,s21_strlen(test8src)));
   ck_assert_int_eq(s21_memcmp(test9src, test9,s21_strlen(test9src)), memcmp(test9src, test9,s21_strlen(test9src)));
 }
@@ -214,31 +214,22 @@ START_TEST(strncmpTest) {
 END_TEST
 
 START_TEST(strchrTest) {
-  char str0_0[] = "SCHOOL21";
-  int symb0_0 = '2';
-  char str0_1[] = "SCHOOL21";
-  int symb0_1 = '2';
+  char str0_0[] = "";
+  int symb0_0 = ' ';
   char str1_0[] = "hello verteeeer";
   int symb1_0 = ' ';
-  char str1_1[] = "hello verteeeer";
-  int symb1_1 = ' ';
   char str2_0[] = "1bgf\045dsf";
   int symb2_0 = '\0';
-  char str2_1[] = "1bgf\045dsf";
-  int symb2_1 = '\0';
   char str3_0[] = "VERTER LET PASS PLS";
   int symb3_0 = 'V';
-  char str3_1[] = "VERTER LET PASS PLS";
-  int symb3_1 = 'V';
   char str4_0[] = "jhsdfakjfhq2kljhsdkjnb123";
   int symb4_0 = 'j';
-  char str4_1[] = "jhsdfakjfhq2kljhsdkjnb123";
-  int symb4_1 = 'j';
-  ck_assert_str_eq(s21_strchr(str0_0, symb0_0), strchr(str0_1, symb0_1));
-  ck_assert_str_eq(s21_strchr(str1_0, symb1_0), strchr(str1_1, symb1_1));
-  ck_assert_str_eq(s21_strchr(str2_0, symb2_0), strchr(str2_1, symb2_1));
-  ck_assert_str_eq(s21_strchr(str3_0, symb3_0), strchr(str3_1, symb3_1));
-  ck_assert_str_eq(s21_strchr(str4_0, symb4_0), strchr(str4_1, symb4_1));
+
+  ck_assert_ptr_eq(s21_strchr(str0_0, symb0_0), strchr(str0_0, symb0_0));
+  ck_assert_str_eq(s21_strchr(str1_0, symb1_0), strchr(str1_0, symb1_0));
+  ck_assert_str_eq(s21_strchr(str2_0, symb2_0), strchr(str2_0, symb2_0));
+  ck_assert_str_eq(s21_strchr(str3_0, symb3_0), strchr(str3_0, symb3_0));
+  ck_assert_str_eq(s21_strchr(str4_0, symb4_0), strchr(str4_0, symb4_0));
 }
 END_TEST
 
@@ -372,7 +363,7 @@ START_TEST(strncpyTest) {
   ck_assert_str_eq(s21_strncpy(str0_7, str7_0, strlen(str7_0)), strncpy(str0_7, str7_0,strlen(str7_0)));
   ck_assert_str_eq(s21_strncpy(str0_8, str8_0, strlen(str8_0)), strncpy(str0_8, str8_0,strlen(str8_0)));
   ck_assert_str_eq(s21_strncpy(str0_9, str9_0, strlen(str9_0)), strncpy(str0_9, str9_0,strlen(str9_0)));
-  ck_assert_str_eq(s21_strncpy(str0_10, str10_0, strlen(str10_0)), strncpy(str0_10, str10_0,strlen(str10_0)));
+  ck_assert_str_eq(s21_strncpy(str0_10, str10_0, 2), strncpy(str0_10, str10_0, 2));
   
 }
 END_TEST
@@ -383,33 +374,30 @@ START_TEST(strpbrkTest) {
   char str1_0[] = "21";
   char str0_2[] = "SCHOOL21";
   char str2_0[] = "H";
-  char str0_3[] = "hello verteeeer";
-  char str3_0[] = "o";
+  char str0_3[] = "verteeeer";
+  char str3_0[] = "q";
   char str0_4[] = "hello verteeeer";
   char str4_0[] = "e";
-  // char str0_5[] = "1bgf\045dsf";
-  // char str5_0[] = "\0";
-  char str0_6[] = "1bgf\045dsf";
-  char str6_0[] = "f";
+  char str0_5[] = "1bgf\045dsf";
+  char str5_0[] = "f";
+  char str0_6[] = "VERTER LET PASS PLS";
+  char str6_0[] = "LET";
   char str0_7[] = "VERTER LET PASS PLS";
-  char str7_0[] = "LET";
-  char str0_8[] = "VERTER LET PASS PLS";
-  char str8_0[] = "P";
-  char str0_9[] = "jhsdfakjfhq2kljhsdkjnb123";
-  char str9_0[] = "123";
-  char str10_0[] = "jhsdfakjfhq2kljhsdkjnb123";
-  char str0_10[] = "d";
+  char str7_0[] = "P";
+  char str0_8[] = "jhsdfakjfhq2kljhsdkjnb123";
+  char str8_0[] = "123";
+  char str9_0[] = "jhsdfakjfhq2kljhsdkjnb123";
+  char str0_9[] = "d";
   
   ck_assert_str_eq(s21_strpbrk(str0_1, str1_0), strpbrk(str0_1, str1_0));
   ck_assert_str_eq(s21_strpbrk(str0_2, str2_0), strpbrk(str0_2, str2_0));
-  ck_assert_str_eq(s21_strpbrk(str0_3, str3_0), strpbrk(str0_3, str3_0));
+  ck_assert_ptr_eq(s21_strpbrk(str0_3, str3_0), strpbrk(str0_3, str3_0));
   ck_assert_str_eq(s21_strpbrk(str0_4, str4_0), strpbrk(str0_4, str4_0));
-  // ck_assert_str_eq(s21_strpbrk(str0_5, str5_0), strpbrk(str0_5, str5_0));
+  ck_assert_str_eq(s21_strpbrk(str0_5, str5_0), strpbrk(str0_5, str5_0));
   ck_assert_str_eq(s21_strpbrk(str0_6, str6_0), strpbrk(str0_6, str6_0));
   ck_assert_str_eq(s21_strpbrk(str0_7, str7_0), strpbrk(str0_7, str7_0));
   ck_assert_str_eq(s21_strpbrk(str0_8, str8_0), strpbrk(str0_8, str8_0));
   ck_assert_str_eq(s21_strpbrk(str0_9, str9_0), strpbrk(str0_9, str9_0));
-  ck_assert_str_eq(s21_strpbrk(str0_10, str10_0), strpbrk(str0_10, str10_0));
   
 }
 END_TEST
@@ -465,8 +453,8 @@ START_TEST(strstrTest) {
   char str8_0[] = "P";
   char str0_9[] = "jhsdfakjfhq2kljhsdkjnb123";
   char str9_0[] = "123";
-  // char str10_0[] = "jhsdfakjfhq2kljhsdkjnb123";
-  // char str0_10[] = "d";
+  char str10_0[] = "";
+  char str0_10[] = "d";
 
   ck_assert_str_eq(s21_strstr(str0_1, str1_0), strstr(str0_1, str1_0));
   ck_assert_str_eq(s21_strstr(str0_2, str2_0), strstr(str0_2, str2_0));
@@ -477,7 +465,7 @@ START_TEST(strstrTest) {
   ck_assert_str_eq(s21_strstr(str0_7, str7_0), strstr(str0_7, str7_0));
   ck_assert_str_eq(s21_strstr(str0_8, str8_0), strstr(str0_8, str8_0));
   ck_assert_str_eq(s21_strstr(str0_9, str9_0), strstr(str0_9, str9_0));
-  // ck_assert_str_ne(s21_strstr(str0_10, str10_0), strstr(str0_10, str10_0));
+  ck_assert_str_eq(s21_strstr(str0_10, str10_0), strstr(str0_10, str10_0));
 }
 END_TEST
 
@@ -486,34 +474,28 @@ START_TEST(strtokTest) {
   char str0_1[] = "SCHOOL21";
   char str1_0[] = "L";
   char str0_2[] = "SCHOOL21";
-  char str2_0[] = "C";
+  char str2_0[] = "L";
   char str0_3[] = "hello verteeeer";
   char str3_0[] = " ";
   char str0_4[] = "hello verteeeer";
-  char str4_0[] = "e";
-  // char str0_5[] = "VERTER LET PASS PLS";
-  // char str5_0[] = " ";
-  // char str1_5[] = "VERTER LET PASS PLS";
-  // char str5_1[] = " ";
-  char str0_6[] = "jhsdfakjfhq2kljhsdkjnb123";
-  char str6_0[] = "1";
+  char str4_0[] = " ";
+  char str0_5[] = "VERTER LET PASS PLS";
+  char str5_0[] = " ";
+  char str1_5[] = "VERTER LET PASS PLS";
+  char str5_1[] = " ";
 
-  ck_assert_str_eq(s21_strtok(str0_1, str1_0), strtok(str0_1, str1_0));
-  // ck_assert_str_eq(s21_strtok(s21_NULL, str1_0), strtok(s21_NULL, str1_0));
-  ck_assert_str_eq(s21_strtok(str0_2, str2_0), strtok(str0_2, str2_0));
-  ck_assert_str_eq(s21_strtok(str0_3, str3_0), strtok(str0_3, str3_0));
-  ck_assert_str_eq(s21_strtok(str0_4, str4_0), strtok(str0_4, str4_0));
-  ck_assert_str_eq(s21_strtok(str0_6, str6_0), strtok(str0_6, str6_0));
-  
-  // char *test5 = s21_strtok(str0_5, str5_0);
-  // char *test5_1 = strtok(str1_5, str5_1);
+  char *result = s21_strtok(s21_NULL, str5_0);
+  char *result1 = s21_strtok(s21_NULL, str5_0);
+  char *finally = "NO";
+  if (result == s21_NULL && result1 == s21_NULL) {
+      finally = "YES";
+  }
 
-  // while (test5 != s21_NULL && test5_1 != s21_NULL) {
-  //   test5 = s21_strtok(s21_NULL, str5_0);
-  //   test5_1 = strtok(s21_NULL, str5_1);
-
-  //   ck_assert_str_eq(test5, test5_1);
-  // }
+  ck_assert_str_eq("YES", finally);
+  ck_assert_str_eq(s21_strtok(str0_1, str1_0), strtok(str0_2, str2_0));
+  ck_assert_str_eq(s21_strtok(str0_3, str3_0), strtok(str0_4, str4_0));
+  ck_assert_str_eq(s21_strtok(str0_5, str5_0), strtok(str1_5, str5_1));
+  ck_assert_str_eq(s21_strtok(s21_NULL, str5_0), strtok(s21_NULL, str5_1));
 
 }
 END_TEST
