@@ -6,7 +6,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 typedef unsigned long s21_size_t;
 #define s21_NULL (void *)0
@@ -78,7 +77,6 @@ typedef unsigned long s21_size_t;
   }
 
 int s21_sprintf(char *str, const char *format, ...);
-
 
 char *s21_strncpy(char *dest, const char *src, s21_size_t n);
 s21_size_t s21_strcspn(const char *str1, const char *str2);

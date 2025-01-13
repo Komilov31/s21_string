@@ -13,9 +13,7 @@ struct Params {
   int accuracy;
   char length;
   int number_system;
-  int flag_to_size;  //?
   int dot;
-  int upper_case;  //?
   int g;
   int e;
 };
@@ -37,6 +35,7 @@ char *num_to_str(struct Params *params, long int number, char *buff_d, int *pos,
                  char form);
 char *input_symbols(char *str, struct Params *params, va_list *args, char form);
 char *p_null(char *str, struct Params *params, int *pos);
+char *input_double(char *str, struct Params *params, va_list *args, char form);
 char *double_to_str(struct Params *params, long double number, char *buff_d,
                     int *pos, char form);
 void output_e(struct Params *params, char *buff_d, int *pos, char form);
@@ -44,10 +43,14 @@ s21_size_t size_double_with_params(struct Params *params, long double *number,
                                    char form);
 int shorter(struct Params *params, long double *number, int e);
 int num_power(long double *number, int e);
-void output_d(struct Params *params, long double *decimal);
+void output_d(struct Params *params, long double *decimal, int integer);
 void output_decimal(struct Params *params, char *buff_d, int *pos, int num_null,
                     long double decimal, long double number, char form);
-void symvols_decimal(struct Params *params, long int number, char *buff_d,
+void symvols_decimal(struct Params *params, long double number, char *buff_d,
                      int *pos);
-
+int nan_inf(long double number);
+void output_decimal(struct Params *params, char *buff_d, int *pos, int num_null,
+                    long double decimal, long double number, char form);
+void nan_inf_output(struct Params *params, char *buff_d, int *pos,
+                    long double number, char *str, char *upper_str, char form);
 #endif

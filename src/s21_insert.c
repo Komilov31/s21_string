@@ -13,22 +13,23 @@
 //     return 0;
 // }
 
-void *s21_insert(const char *src, const char *str, s21_size_t start_index){
-    char *string_with_insertion = s21_NULL;
-    if(src && str && start_index <= strlen(src)){
-        string_with_insertion = malloc((strlen(src) + strlen(str) + 1) * sizeof(char));
+void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
+  char *string_with_insertion = s21_NULL;
+  if (src && str && start_index <= strlen(src)) {
+    string_with_insertion =
+        malloc((strlen(src) + strlen(str) + 1) * sizeof(char));
     s21_size_t i = 0;
-    for(; i < start_index; i++){
-            string_with_insertion[i] = src[i];
-        }
-    s21_size_t end_of_src = i;
-    for(s21_size_t j = 0; j < strlen(str); i++, j++){
-        string_with_insertion[i] = str[j];
+    for (; i < start_index; i++) {
+      string_with_insertion[i] = src[i];
     }
-    for(; end_of_src < strlen(src); end_of_src++, i++){
-        string_with_insertion[i] = src[end_of_src];
+    s21_size_t end_of_src = i;
+    for (s21_size_t j = 0; j < strlen(str); i++, j++) {
+      string_with_insertion[i] = str[j];
+    }
+    for (; end_of_src < strlen(src); end_of_src++, i++) {
+      string_with_insertion[i] = src[end_of_src];
     }
     string_with_insertion[strlen(string_with_insertion)] = '\0';
-    }
-    return (void *)string_with_insertion;
+  }
+  return (void *)string_with_insertion;
 }

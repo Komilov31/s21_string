@@ -1,6 +1,5 @@
 #include "s21_string.h"
 
-
 char *s21_strrchr(const char *str, int c) {
     int flag = 0;
     char *return_value = s21_NULL;
@@ -13,5 +12,6 @@ char *s21_strrchr(const char *str, int c) {
             }
         }
     }
-    return return_value;
+
+  return return_value;
 }

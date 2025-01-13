@@ -1,17 +1,12 @@
 #include "s21_string.h"
 
 char *s21_strtok(char *str, const char *delim) {
-  
-    static char *last = s21_NULL;
-    char *start = s21_NULL;
-    
-    if (str != s21_NULL) {
-        last = str;
-    }
+  static char *last = s21_NULL;
+  char *start = s21_NULL;
 
-    if (last == s21_NULL) {
-        start = s21_NULL;
-    } 
+  if (str != s21_NULL) {
+    last = str;
+  }
 
     while (last != s21_NULL && *last != '\0' && s21_strchr(delim, *last) != s21_NULL) {
         last++;
@@ -32,5 +27,10 @@ char *s21_strtok(char *str, const char *delim) {
         last++;
     }
 
-    return start;
+  if (*last != '\0') {
+    *last = '\0';
+    last++;
+  }
+
+  return start;
 }

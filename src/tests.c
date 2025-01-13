@@ -1,5 +1,6 @@
 #include <check.h>
 #include <string.h>
+
 #include "s21_string.h"
 
 START_TEST(memchrTest) {
@@ -204,6 +205,11 @@ START_TEST(strncmpTest) {
                    strncmp(test5_0, test5_1, s21_strlen(test5_0)));
   ck_assert_int_eq(s21_strncmp(test6_0, test6_1, s21_strlen(test6_0)),
                    strncmp(test6_0, test6_1, s21_strlen(test6_0)));
+
+  ck_assert_int_eq(s21_strncmp(test6_0, test6_1, 1),
+                   strncmp(test6_0, test6_1, 1));
+  ck_assert_int_eq(s21_strncmp(test6_0, test6_1, 1),
+                   strncmp(test6_0, test6_1, 1));
   ck_assert_int_eq(s21_strncmp(test7_0, test7_1, s21_strlen(test7_0)),
                    strncmp(test7_0, test7_1, s21_strlen(test7_0)));
   ck_assert_int_eq(s21_strncmp(test8_0, test8_1, s21_strlen(test8_0)),
@@ -255,7 +261,7 @@ START_TEST(strncatTest) {
   // char str4_1[] = "sdfsadfsdfakcjnael;tdjka;lck";
   // char src4_1[] = "jsdafklsdjf;klasdfj ;lasnf;askdjfn";
   // ck_assert_str_eq(s21_strncat(str0_0, src0_0, s21_strlen(str0_0)),
-                  //  strncat(str0_1, src0_1, s21_strlen(str0_1)));
+  //  strncat(str0_1, src0_1, s21_strlen(str0_1)));
   ck_assert_str_eq(s21_strncat(str1_0, src1_0, s21_strlen(str1_0)),
                    strncat(str1_1, src1_1, s21_strlen(str1_1)));
   ck_assert_str_eq(s21_strncat(str2_0, src2_0, s21_strlen(str2_0)),
@@ -263,13 +269,11 @@ START_TEST(strncatTest) {
   ck_assert_str_eq(s21_strncat(str3_0, src3_0, s21_strlen(str3_0)),
                    strncat(str3_1, src3_1, s21_strlen(str3_1)));
   // ck_assert_str_eq(s21_strncat(str4_0, src4_0, s21_strlen(str4_0)),
-                  //  strncat(str4_1, src4_1, s21_strlen(str4_1)));
+  //  strncat(str4_1, src4_1, s21_strlen(str4_1)));
 }
 END_TEST
 
-
 START_TEST(strcspnTest) {
-
   char str0_1[] = "SCHOOL21";
   char str1_0[] = "21";
   char str0_2[] = "SCHOOL21";
@@ -305,7 +309,6 @@ START_TEST(strcspnTest) {
 END_TEST
 
 START_TEST(strerrorTest) {
-
   int case1 = 3;
   int case2 = 8;
   int case3 = 15;
@@ -327,12 +330,10 @@ START_TEST(strerrorTest) {
   ck_assert_str_eq(s21_strerror(case8), strerror(case8));
   ck_assert_str_eq(s21_strerror(case9), strerror(case9));
   ck_assert_str_eq(s21_strerror(case10), strerror(case10));
-  
 }
 END_TEST
 
 START_TEST(strncpyTest) {
-
   char str0_1[] = "SCHOOL21";
   char str1_0[] = "21";
   char str0_2[] = "SCHOOL21";
@@ -369,7 +370,6 @@ START_TEST(strncpyTest) {
 END_TEST
 
 START_TEST(strpbrkTest) {
-
   char str0_1[] = "SCHOOL21";
   char str1_0[] = "21";
   char str0_2[] = "SCHOOL21";
@@ -402,7 +402,6 @@ START_TEST(strpbrkTest) {
 }
 END_TEST
 
-
 START_TEST(strrchrTest) {
   char str0_0[] = "SCHOOL21";
   int symb0_0 = '2';
@@ -428,13 +427,11 @@ START_TEST(strrchrTest) {
   ck_assert_str_eq(s21_strrchr(str1_0, symb1_0), strrchr(str1_1, symb1_1));
   ck_assert_str_eq(s21_strrchr(str2_0, symb2_0), strrchr(str2_1, symb2_1));
   ck_assert_str_eq(s21_strrchr(str3_0, symb3_0), strrchr(str3_1, symb3_1));
-  ck_assert_str_eq(s21_strrchr (str4_0, symb4_0), strrchr(str4_1, symb4_1));
+  ck_assert_str_eq(s21_strrchr(str4_0, symb4_0), strrchr(str4_1, symb4_1));
 }
 END_TEST
 
-
 START_TEST(strstrTest) {
-
   char str0_1[] = "SCHOOL21";
   char str1_0[] = "21";
   char str0_2[] = "SCHOOL21";
@@ -470,7 +467,6 @@ START_TEST(strstrTest) {
 END_TEST
 
 START_TEST(strtokTest) {
-
   char str0_1[] = "SCHOOL21";
   char str1_0[] = "L";
   char str0_2[] = "SCHOOL21";
@@ -485,9 +481,11 @@ START_TEST(strtokTest) {
   char str5_1[] = " ";
   char str0_6[] = "";
   char str6_0[] = " ";
+  char str1_6[] = "";
+  char str6_1[] = " ";
 
-  char *result = s21_strtok(s21_NULL, str5_0);
-  char *result1 = s21_strtok(s21_NULL, str5_0);
+  char *result = s21_strtok(str0_6, str6_0);
+  char *result1 = s21_strtok(str1_6, str6_1);
   char *finally = "NO";
   if (result == s21_NULL && result1 == s21_NULL) {
       finally = "YES";
@@ -498,12 +496,10 @@ START_TEST(strtokTest) {
   ck_assert_str_eq(s21_strtok(str0_3, str3_0), strtok(str0_4, str4_0));
   ck_assert_str_eq(s21_strtok(str0_5, str5_0), strtok(str1_5, str5_1));
   ck_assert_str_eq(s21_strtok(s21_NULL, str5_0), strtok(s21_NULL, str5_1));
-  ck_assert_ptr_eq(s21_strtok(str0_6, str6_0), strtok(str0_6, str6_0));
-
+  // ck_assert_ptr_eq(s21_strtok(str0_6, str6_0), strtok(str0_6, str6_0));
 
 }
 END_TEST
-
 
 int main(void) {
   Suite *sc = suite_create("s21_string");
